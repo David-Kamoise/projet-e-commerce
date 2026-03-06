@@ -1,0 +1,136 @@
+/**
+ * Feuille de style pour le backoffice (administration)
+ */
+
+/* === ADMIN HEADER === */
+.admin-body {
+    background-color: #ecf0f1;
+}
+
+.admin-header {
+    background-color: #34495e;
+}
+
+.admin-nav ul {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+}
+
+.admin-nav a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.admin-nav a:hover {
+    color: #3498db;
+}
+
+/* === ADMIN CONTENT === */
+.admin-content {
+    min-height: calc(100vh - 200px);
+    padding: 2rem 0;
+}
+
+/* === PAGE HEADER === */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #bdc3c7;
+}
+
+.page-header h1 {
+    color: #2c3e50;
+}
+
+/* === ADMIN TABLE === */
+.admin-table {
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-collapse: collapse;
+}
+
+.admin-table thead {
+    background-color: #34495e;
+    color: white;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 1rem;
+    text-align: left;
+}
+
+.admin-table tbody tr {
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.admin-table .text-center {
+    text-align: center;
+}
+
+/* === PRODUCT THUMBNAIL === */
+.product-thumbnail {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* === BADGES === */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+.badge-success {
+    background-color: #27ae60;
+    color: white;
+}
+
+.badge-warning {
+    background-color: #f39c12;
+    color: white;
+}
+
+.badge-danger {
+    background-color: #e74c3c;
+    color: white;
+}
+
+/* === ACTIONS === */
+.actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* === TABLE STATS === */
+.table-stats {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 5px;
+    text-align: right;
+}
+
+/* === PRODUCT FORM === */
+.product-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}

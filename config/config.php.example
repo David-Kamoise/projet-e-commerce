@@ -1,0 +1,43 @@
+<?php
+/**
+ * Fichier de configuration principale
+ *
+ * Ce fichier contient toutes les constantes de configuration de l'application.
+ * Il est inclus dans tous les fichiers qui en ont besoin.
+ */
+
+// Configuration de l'environnement
+define('ENV', 'development'); // development ou production
+
+// Configuration du site
+define('SITE_NAME', 'TahitiGame');
+define('SITE_URL', 'http://localhost/tahitigame');
+
+// Configuration de la base de données
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'tahitigame');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('DB_CHARSET', 'utf8mb4');
+
+// Configuration des chemins
+define('BASE_PATH', __DIR__ . '/..');
+define('VIEWS_PATH', BASE_PATH . '/views');
+define('ASSETS_PATH', SITE_URL . '/assets');
+
+// Configuration de la sécurité
+define('SESSION_LIFETIME', 3600); // 1 heure en secondes
+
+// Affichage des erreurs (à désactiver en production)
+if (ENV === 'development') {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+} else {
+    error_reporting(0);
+    ini_set('display_errors', 0);
+}
+
+// Démarrage de la session (si elle n'est pas déjà démarrée)
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}

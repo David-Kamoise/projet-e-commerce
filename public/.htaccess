@@ -1,0 +1,26 @@
+# Configuration Apache pour TahitiGame
+
+# Activation de la réécriture d'URLs
+RewriteEngine On
+
+# Redirection de toutes les requêtes vers index.php
+# (sauf pour les fichiers et dossiers qui existent réellement)
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+
+# TODO POUR LES ÉTUDIANTS :
+# Cette configuration est commentée car elle nécessite une adaptation du routing.
+# Pour l'instant, nous utilisons le routing simple avec ?controller=xxx&action=yyy
+# Vous pouvez décommenter et adapter le code pour avoir des URLs plus propres.
+
+# Protection contre les injections
+# Désactive l'exécution de PHP dans le dossier uploads (si vous en créez un)
+<FilesMatch "\.(php|php3|php4|php5|phtml)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Affichage des erreurs (à désactiver en production)
+php_flag display_errors On
+php_flag display_startup_errors On
