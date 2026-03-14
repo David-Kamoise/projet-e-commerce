@@ -1,126 +1,88 @@
 # Guide d'installation - Starter Kit E-Commerce BTS SIO 1
 
-## Prérequis
+## Étape 1 : Installation de la stack LAMP
 
-Avant de commencer, assurez-vous d'avoir installé :
+### Apache + PHP
 
-- [ ] **Serveur local** : XAMPP, WAMP, MAMP ou Docker
-- [ ] **PHP** : Version 7.4 minimum (8.0+ recommandé)
-- [ ] **MySQL** : Version 5.7 minimum (8.0+ recommandé)
-- [ ] **Navigateur web** : Chrome, Firefox, Edge ou Safari
+- exécuter dans un terminal
+
+```bash
+sudo apt install apache2 libapache2-mod-php
+```
+
+- ouvrir un navigateur à l'adresse : http://localhost
+
+### Mysql (Mariadb)
+
+- exécuter dans un terminal
+
+```bash
+sudo apt install mariadb-server mariadb-client
+```
 
 ---
 
-## Étape 1 : Installation du serveur local
+## Étape 2 : Créer la base de données
 
-### Option A : XAMPP (Windows, Mac, Linux)
+- exécuter dans un terminal
 
-1. Téléchargez XAMPP : https://www.apachefriends.org/
-2. Installez XAMPP en suivant l'assistant
-3. Démarrez **Apache** et **MySQL** depuis le panneau de contrôle XAMPP
+```bash
+sudo mysql -u root
+```
 
-### Option B : WAMP (Windows uniquement)
+- créer la base de données et un utilisateur associé
 
-1. Téléchargez WAMP : https://www.wampserver.com/
-2. Installez WAMP
-3. Lancez WAMP (icône verte = tout fonctionne)
+```sql
+CREATE USER 'sio'@'localhost' IDENTIFIED BY '_TODO_';
+GRANT ALL PRIVILEGES ON tahitigame.* TO 'sio'@'localhost';
+FLUSH PRIVILEGES;
+```
 
-### Option C : MAMP (Mac uniquement)
+- importer le script SQL
 
-1. Téléchargez MAMP : https://www.mamp.info/
-2. Installez MAMP
-3. Lancez MAMP et cliquez sur "Start Servers"
+```bash
+sudo mysql -u root < database.sql
+```
 
 ---
 
-## Étape 2 : Copier les fichiers du projet
+## Étape 3 : Gérer la base de données
 
-Copiez le dossier `starter-kit` dans votre répertoire web :
+- télécharger adminer : https://www.adminer.org/
+- déployer adminer
 
-### Sur XAMPP
-```
-C:\xampp\htdocs\starter-kit
-```
-
-### Sur WAMP
-```
-C:\wamp64\www\starter-kit
+```bash
+sudo mkdir /var/www/html/adminer
+sudo cp adminer-<version>.php /var/www/html/adminer/index.php
+sudo chown -R www-data: /var/www/html/adminer
 ```
 
-### Sur MAMP
+- ouvrir un navigateur à l'adresse : http://localhost/adminer/
+- vérifier la base de données *tahitigame*
+
+---
+
+## Étape 4 : Déployer le projet
+
+- configurer l'accès à la base de données
+
+```bash
+cp config/config.php.example config/config.php
+nano config/config.php
+  define('DB_NAME', 'tahitigame');
+  define('DB_USER', 'sio');
+  define('DB_PASS', '_TODO_');
+chmod 600 config/config.php
 ```
-/Applications/MAMP/htdocs/starter-kit
+
+- exécuter dans un terminal
+
+```bash
+sudo cp -r starter-kit /var/www/html
+sudo chown -R www-data: /var/www/html/starter-kit
 ```
 
 **Important** : Vous pouvez renommer le dossier selon votre projet (ex: `mon-projet-ecommerce`).
-
----
-
-## Étape 3 : Créer la base de données
-
-### 3.1 Ouvrir phpMyAdmin
-
-Dans votre navigateur, allez à l'adresse :
-```
-http://localhost/phpmyadmin
-```
-
-### 3.2 Importer le script SQL
-
-1. Cliquez sur l'onglet **SQL** en haut de la page
-2. Ouvrez le fichier `database.sql` (dans le dossier starter-kit) avec un éditeur de texte
-3. Copiez tout le contenu du fichier
-4. Collez-le dans la zone de texte de phpMyAdmin
-5. Cliquez sur le bouton **Exécuter** en bas à droite
-
-### 3.3 Vérifier la création
-
-1. Dans le menu de gauche, vous devriez voir apparaître la base `exemple_starter`
-2. Cliquez dessus
-3. Vous devriez voir 2 tables :
-   - `foo_categories`
-   - `foos`
-
-⚠️ **IMPORTANT** : Cette base de données est un **exemple générique**. Vous devrez :
-- Créer votre propre base de données pour votre projet (ex: `tahitigame`)
-- Adapter les tables selon votre module (produits, clients, commandes, paniers)
-
----
-
-## Étape 4 : Configurer la connexion à la base
-
-### 4.1 Ouvrir le fichier de configuration
-
-Ouvrez le fichier suivant avec un éditeur de code :
-```
-starter-kit/config/config.php
-```
-
-### 4.2 Vérifier les paramètres de connexion
-
-Localisez ces lignes dans le fichier :
-
-```php
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'exemple_starter');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-```
-
-### 4.3 Adapter si nécessaire
-
-**Pour XAMPP/WAMP (Windows)** :
-- Utilisateur : `root`
-- Mot de passe : `` (vide)
-
-**Pour MAMP (Mac)** :
-- Utilisateur : `root`
-- Mot de passe : `root`
-
-Si vous utilisez MAMP, modifiez la ligne comme suit :
-```php
-define('DB_PASS', 'root');
-```
 
 ---
 
@@ -188,27 +150,20 @@ http://localhost/starter-kit/public/admin.php
 **Problème** : Le serveur MySQL n'est pas démarré
 
 **Solution** :
-1. Ouvrez le panneau XAMPP/WAMP/MAMP
-2. Vérifiez que **MySQL** est bien démarré (bouton vert)
-3. Redémarrez MySQL si nécessaire
+
+```bash
+sudo systemctl status mariadb
+sudo systemctl restart mariadb
+```
 
 ### Erreur : "Base de données non trouvée"
 
-**Problème** : La base `exemple_starter` n'a pas été créée
+**Problème** : La base `tahitigame` n'a pas été créée
 
 **Solution** :
-1. Retournez à l'étape 3
+1. Retournez à l'étape 2
 2. Vérifiez que le script SQL a bien été exécuté
-3. Vérifiez dans phpMyAdmin que la base `exemple_starter` existe
-
-### Erreur : "Access denied for user 'root'"
-
-**Problème** : Le mot de passe de connexion est incorrect
-
-**Solution** :
-1. Vérifiez le mot de passe MySQL dans phpMyAdmin
-2. Adaptez le fichier `config/config.php` en conséquence
-3. Sur MAMP, le mot de passe est généralement `root`
+3. Vérifiez dans adminer que la base `tahitigame` existe
 
 ### Erreur 404 : Page non trouvée
 
@@ -249,8 +204,8 @@ if (ENV === 'development') {
 Avant de commencer à développer, vérifiez que :
 
 - [ ] Le serveur local (Apache + MySQL) est démarré
-- [ ] La base de données `exemple_starter` existe avec ses 2 tables
-- [ ] Les fichiers sont dans le bon dossier (`htdocs/starter-kit`)
+- [ ] La base de données `tahitigame` existe avec ses tables
+- [ ] Les fichiers sont dans le bon dossier (`/var/www/html/starter-kit`)
 - [ ] Le frontoffice affiche le catalogue : `http://localhost/starter-kit/public/index.php`
 - [ ] Le backoffice affiche la liste admin : `http://localhost/starter-kit/public/admin.php`
 - [ ] Vous pouvez créer, modifier et supprimer un foo
